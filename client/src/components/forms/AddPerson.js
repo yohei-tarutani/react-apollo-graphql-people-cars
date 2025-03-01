@@ -55,20 +55,21 @@ const AddPerson = () => {
           label="First Name: "
           rules={[{ required: true, message: "Please enter a first name." }]}
         >
-          <Input placeholder="First Name" />
+          <Input placeholder="First Name" style={{ borderRadius: "0px" }} />
         </Form.Item>
         <Form.Item
           name="lastName"
           label="Last Name: "
           rules={[{ required: true, message: "Please enter a last name." }]}
         >
-          <Input placeholder="Last Name" />
+          <Input placeholder="Last Name" style={{ borderRadius: "0px" }} />
         </Form.Item>
         <Form.Item shouldUpdate="true">
           {() => (
             <Button
               type="primary"
               htmlType="submit"
+              style={{ borderRadius: "0px" }}
               disabled={
                 !form.isFieldsTouched(true) ||
                 form.getFieldsError().filter(({ errors }) => errors.length)

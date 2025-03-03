@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 // Query (Get)
 export const GET_PEOPLE = gql`
-  {
+  query GetPeople {
     people {
       id
       firstName
@@ -11,7 +11,7 @@ export const GET_PEOPLE = gql`
   }
 `;
 export const GET_CARS = gql`
-  {
+  query GetCars {
     cars {
       id
       year
@@ -23,18 +23,20 @@ export const GET_CARS = gql`
   }
 `;
 export const GET_PERSON_WITH_CARS = gql`
-  {
-    person {
-      id
-      firstName
-      lastName
-    }
-    cars {
-      id
-      year
-      make
-      price
-      personId
+  query GetPersonWithCars($id: String!) {
+    personWithCars(id: $id) {
+      person {
+        id
+        firstName
+        lastName
+      }
+      cars {
+        id
+        year
+        make
+        model
+        price
+      }
     }
   }
 `;

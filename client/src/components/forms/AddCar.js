@@ -5,6 +5,7 @@ import { v4 as uuid4 } from "uuid";
 import { Button, Divider, Form, Input, Select } from "antd";
 
 const AddCar = () => {
+  const styles = getStyles();
   const [id] = useState(uuid4());
   const [form] = Form.useForm();
   const [, forceUpdate] = useState();
@@ -32,93 +33,148 @@ const AddCar = () => {
         personId,
       },
       update: (cache, { data: { addCar } }) => {
-        const carData = cache.readQuery({ query: GET_CARS });
-        cache.writeQuery({
-          query: GET_CARS,
-          data: {
-            ...carData,
-            people: [...carData.cars, addCar],
-          },
-        });
+        try {
+          const carData = cache.readQuery({ query: GET_CARS });
+          cache.writeQuery({
+            query: GET_CARS,
+            data: {
+              cars: [...carData.cars, addCar],
+            },
+          });
+
+          const peopleData = cache.readQuery({ query: GET_PEOPLE });
+          cache.writeQuery({
+            query: GET_PEOPLE,
+            data: {
+              people: peopleData.people.map((person) =>
+                person.id === personId
+                  ? { ...person, cars: [...ADD_CAR(person.cars || []), addCar] }
+                  : person
+              ),
+            },
+          });
+        } catch (error) {
+          console.error("Error updating cache: ", error);
+        }
       },
     });
+
+    form.resetFields();
   };
 
   return (
     <>
-      <Divider style={{ fontSize: "35px", fontWeight: "bold" }}>
+      <Divider
+        style={{ fontSize: "30px", fontWeight: "bold", borderColor: "#ddd" }}
+      >
         Add Car
       </Divider>
-      <Form
-        name="add-car-form"
-        layout="inline"
-        size="large"
-        style={{ marginBottom: "40px" }}
-        form={form}
-        onFinish={onFinish}
-      >
-        <Form.Item
-          name="year"
-          label="Year: "
-          rules={[{ required: true, message: "Please enter a year." }]}
+      {data.people.length > 0 ? (
+        <Form
+          name="add-car-form"
+          layout="inline"
+          size="large"
+          style={{ marginBottom: "30px" }}
+          form={form}
+          onFinish={onFinish}
         >
-          <Input placeholder="Year" style={{ borderRadius: "0px" }} />
-        </Form.Item>
-        <Form.Item
-          name="make"
-          label="Make: "
-          rules={[
-            { required: true, message: "Please enter a make(car maker)." },
-          ]}
-        >
-          <Input placeholder="Make" style={{ borderRadius: "0px" }} />
-        </Form.Item>
-        <Form.Item
-          name="model"
-          label="Model: "
-          rules={[{ required: true, message: "Please enter a car model." }]}
-        >
-          <Input placeholder="Model" style={{ borderRadius: "0px" }} />
-        </Form.Item>
-        <Form.Item
-          name="price"
-          label="Price: "
-          rules={[{ required: true, message: "Please enter a price." }]}
-        >
-          <Input addonBefore="$" style={{ borderRadius: "0px" }} />
-        </Form.Item>
-        <Form.Item
-          name="person"
-          label="Person: "
-          rules={[{ required: true, message: "Please select a person." }]}
-        >
-          <Select placeholder="Select a person">
-            {data.people.map((person, index) => (
-              <Select.Option key={index} value={person.id}>
-                {person.firstName} {person.lastName}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item shouldUpdate="true">
-          {() => (
-            <Button
-              type="primary"
-              htmlType="submit"
-              style={{ borderRadius: "0px" }}
-              disabled={
-                !form.isFieldsTouched(true) ||
-                form.getFieldsError().filter(({ errors }) => errors.length)
-                  .length
-              }
+          <Form.Item
+            name="year"
+            label="Year: "
+            rules={[{ required: true, message: "Please enter a year." }]}
+          >
+            <Input
+              placeholder="Year"
+              style={{
+                borderRadius: "0px",
+                width: "100px",
+                marginBottom: "10px",
+              }}
+            />
+          </Form.Item>
+          <Form.Item
+            name="make"
+            label="Make: "
+            rules={[
+              { required: true, message: "Please enter a make(car maker)." },
+            ]}
+          >
+            <Input
+              placeholder="Make"
+              style={{ borderRadius: "0px", marginBottom: "10px" }}
+            />
+          </Form.Item>
+          <Form.Item
+            name="model"
+            label="Model: "
+            rules={[{ required: true, message: "Please enter a car model." }]}
+          >
+            <Input
+              placeholder="Model"
+              style={{ borderRadius: "0px", marginBottom: "10px" }}
+            />
+          </Form.Item>
+          <Form.Item
+            name="price"
+            label="Price: "
+            rules={[{ required: true, message: "Please enter a price." }]}
+          >
+            <Input prefix="$" style={styles.price} />
+          </Form.Item>
+          <Form.Item
+            name="personId"
+            label="Person: "
+            rules={[{ required: true, message: "Please select a person." }]}
+          >
+            <Select
+              placeholder="Select a person"
+              variant="false"
+              style={styles.selectPerson}
             >
-              Add Car
-            </Button>
-          )}
-        </Form.Item>
-      </Form>
+              {data.people.map((person, index) => (
+                <Select.Option key={index} value={person.id}>
+                  {person.firstName} {person.lastName}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item shouldUpdate="true">
+            {() => (
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ borderRadius: "0px" }}
+                disabled={
+                  !form.isFieldsTouched(true) ||
+                  form.getFieldsError().filter(({ errors }) => errors.length)
+                    .length
+                }
+              >
+                Add Car
+              </Button>
+            )}
+          </Form.Item>
+        </Form>
+      ) : (
+        <p style={{ textAlign: "center", fontSize: "18px", color: "gray" }}>
+          No people exist. Please add a person first.
+        </p>
+      )}
     </>
   );
 };
+
+const getStyles = () => ({
+  price: {
+    borderRadius: "0px",
+    width: "100px",
+    marginBottom: "10px",
+  },
+  selectPerson: {
+    border: "1px solid #ddd",
+    borderRadius: "0px",
+    marginBottom: "10px",
+  },
+});
 
 export default AddCar;

@@ -35,18 +35,21 @@ const AddPerson = () => {
         });
       },
     });
+    form.resetFields();
   };
 
   return (
     <>
-      <Divider style={{ fontSize: "35px", fontWeight: "bold" }}>
+      <Divider
+        style={{ fontSize: "30px", fontWeight: "bold", borderColor: "#ddd" }}
+      >
         Add Person
       </Divider>
       <Form
         name="add-person-form"
         layout="inline"
         size="large"
-        style={{ marginBottom: "40px" }}
+        style={{ marginBottom: "30px" }}
         form={form}
         onFinish={onFinish}
       >

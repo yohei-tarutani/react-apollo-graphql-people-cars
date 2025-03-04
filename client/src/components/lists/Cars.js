@@ -12,6 +12,9 @@ const Cars = (props) => {
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;
 
+  // console.log(data.cars);
+  // Object { cars: Array(9) [ {__typename: 'Car', id: '1', year: '2019', make: 'Toyota', model: 'Corolla', price: '40000', personId: '1'}, {…}, {…}, ... ] }
+
   return (
     <>
       <div style={styles.list}>

@@ -52,7 +52,9 @@ const PersonAndCars = () => {
           )}
         />
       ) : (
-        <p>No cars are owned.</p>
+        <p style={{ textAlign: "center", paddingBottom: "30px" }}>
+          No cars are owned.
+        </p>
       )}
       <p style={{ display: "inline", margin: "0" }}>
         <Link to="/" style={styles.link}>

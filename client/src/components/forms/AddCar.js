@@ -48,7 +48,7 @@ const AddCar = () => {
             data: {
               people: peopleData.people.map((person) =>
                 person.id === personId
-                  ? { ...person, cars: [...ADD_CAR(person.cars || []), addCar] }
+                  ? { ...person, cars: [...(person.cars || []), addCar] }
                   : person
               ),
             },

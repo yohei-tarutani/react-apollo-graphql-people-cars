@@ -11,7 +11,7 @@ const People = () => {
   if (error) return `Error! ${error.message}`;
 
   // console.log("data", data);
-  // { contacts: Array(3) [{__typename: 'Person', id: '1', firstName: 'Paul', lastName: 'Lam'}, {…}, {…}] }
+  // Object { people: Array(3) [ {__typename: 'Person', id: '1', firstName: 'Bill', lastName: 'Gates'}, {…}, {…} ] }
   return (
     <>
       <Divider

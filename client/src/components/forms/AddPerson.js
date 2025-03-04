@@ -29,7 +29,6 @@ const AddPerson = () => {
         cache.writeQuery({
           query: GET_PEOPLE,
           data: {
-            ...data,
             people: [...data.people, addPerson],
           },
         });

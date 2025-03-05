@@ -1,5 +1,9 @@
 # react-apollo-graphql-people-cars
 
+https://github.com/user-attachments/assets/a406fbfa-9160-4b8d-8e08-fb20363e1791
+
+## Running the local server
+
 ## 1. "server" directory
 
 In the "server" directory, you can run:

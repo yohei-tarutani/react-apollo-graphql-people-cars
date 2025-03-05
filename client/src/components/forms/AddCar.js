@@ -1,6 +1,11 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { ADD_CAR, GET_CARS, GET_PEOPLE } from "../../graphql/queries";
+import {
+  ADD_CAR,
+  GET_CARS,
+  GET_PEOPLE,
+  GET_PERSON_WITH_CARS,
+} from "../../graphql/queries";
 import { v4 as uuid4 } from "uuid";
 import { Button, Divider, Form, Input, Select } from "antd";
 
@@ -47,7 +52,7 @@ const AddCar = () => {
             query: GET_PEOPLE,
             data: {
               people: peopleData.people.map((person) =>
-                person.id === personId
+                person.id === addCar.personId
                   ? { ...person, cars: [...(person.cars || []), addCar] }
                   : person
               ),
@@ -56,6 +61,10 @@ const AddCar = () => {
         } catch (error) {
           console.error("Error updating cache: ", error);
         }
+      },
+      refetchQueries: {
+        query: GET_PERSON_WITH_CARS,
+        variables: { id: personId },
       },
     });
 

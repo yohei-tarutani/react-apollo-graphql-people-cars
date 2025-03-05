@@ -40,7 +40,7 @@ const UpdateCar = (props) => {
       layout="inline"
       initialValues={{ year, make, model, price, personId }}
       onFinish={onFinish}
-      style={{ marginBottom: "15px" }}
+      style={{ margin: "15px 0" }}
     >
       <Form.Item
         name="year"

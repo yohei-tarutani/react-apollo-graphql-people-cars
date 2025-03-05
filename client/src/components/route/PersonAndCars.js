@@ -13,6 +13,7 @@ const PersonAndCars = () => {
   const { loading, error, data } = useQuery(GET_PERSON_WITH_CARS, {
     variables: { id },
     skip: !id, // Prevent running the query if id is missing
+    fetchPolicy: "network-only", // Forces Apollo to always fetch the latest data instead of relying on the cache.
   });
 
   if (loading) return "Loading...";
